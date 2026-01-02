@@ -75,12 +75,12 @@ const Features = () => {
                             width={600}
                             height={400}
                             className="w-full h-auto rounded-lg shadow-lg"
+                            unoptimized
                         />
                     </div>
                 </div>
             </div>
         </section>
-
     );
 };
 
