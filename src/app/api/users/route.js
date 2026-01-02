@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { EmailCode } from "@/models/emailModels";
-import { User } from "@/models/userModels";
+import { connectDB } from "../../lib/mongodb";
+import { EmailCode } from "../../models/emailModels";
+import { User } from "../../models/userModels";
 import bcrypt from "bcryptjs";
 
 // ---------------------------------------------

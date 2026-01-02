@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { connectDB } from "@/lib/mongodb";
-import { User } from "@/models/userModels";
-import { sendpasswordEmail } from "@/lib/resetemail";
+import { connectDB } from "../../../lib/mongodb";
+import { User } from "../../../models/userModels";
+import { sendpasswordEmail } from "../../../lib/resetemail";
 
 // ---------------------------------------------
 // --- POST: Forgot Password -------------------
@@ -51,6 +51,7 @@ export async function POST(req) {
     JSON.stringify({
       success: true,
       message: "Password reset email sent",
+      token: token,
     }),
     { status: 200 }
   );

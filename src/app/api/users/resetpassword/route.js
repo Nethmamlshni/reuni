@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/mongodb";
-import { User } from "@/models/userModels";
+import { connectDB } from "../../../lib/mongodb";
+import { User } from "../../../models/userModels";
 import bcrypt from "bcryptjs";
 
 // ---------------------------------------------
@@ -41,7 +41,7 @@ export async function POST(req) {
   await user.save();
 
   return new Response(
-    JSON.stringify({ success: true, message: "Password has been reset" }),
+    JSON.stringify({ success: true, message: "Password has been reset"}),
     { status: 200 }
   );
 }
