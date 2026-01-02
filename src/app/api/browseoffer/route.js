@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { BrowserOffer } from "@/models/browseofferModels";
+import { connectDB } from "../../../../lib/mongodb";
+import { BrowserOffer } from "../../../../models/browseofferModels";
 import mongoose from "mongoose";
 
 // ----------------------------------------------

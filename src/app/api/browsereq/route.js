@@ -1,6 +1,6 @@
 // app/api/browsereq/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { BreqItemModel } = require('@/models/browsereqModels');
+const { connectDB } = require('../../../lib/mongodb');
+const { BreqItemModel } = require('../../models/browsereqModels');
 
 // --------------------------------------------
 // ---------- POST: Create a request ----------

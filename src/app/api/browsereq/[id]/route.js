@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { BreqItemModel } from "@/models/browsereqModels";
+import { connectDB } from "../../../../lib/mongodb";
+import { BreqItemModel } from "../../../models/browsereqModels";
 
 // ----------------------------------------------
 // ---------- GET: Get a request by ID, userId, or itemId ----------
@@ -8,7 +8,7 @@ import { BreqItemModel } from "@/models/browsereqModels";
 export async function GET(_, context) {
   try {
     await connectDB();
-    const { id } = context.params; // no await needed
+    const { id } = await context.params; // no await needed
     if (!id) {
       return NextResponse.json({ message: "Missing id param" }, { status: 400 });
     }
@@ -43,7 +43,7 @@ export async function GET(_, context) {
 export async function PUT(request, context) {
   try {
     await connectDB();
-    const { id } = context.params;
+    const { id } = await context.params;
     if (!id) {
       return NextResponse.json({ message: "Missing id param" }, { status: 400 });
     }
