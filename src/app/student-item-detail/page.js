@@ -85,29 +85,6 @@ export default function ItemDetail() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Navigation */}
-            <nav className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex justify-between items-center">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                            </div>
-                            <span className="text-lg font-bold text-gray-900">UniShare</span>
-                        </Link>
-
-                        <div className="hidden md:flex items-center gap-8">
-                            <Link href="/catalog" className="text-sm font-medium text-gray-900 transition-colors">Catalog</Link>
-                            <Link href="/#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">FAQ</Link>
-                            <Link href="/#about" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">About Us</Link>
-                            <Link href="/register" className="px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all">Register</Link>
-                            <Link href="/login" className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-all">Login</Link>
-                        </div>
-                    </div>
-                </div>
-            </nav>
 
             {/* Main Content */}
             <div className="max-w-6xl mx-auto px-6 py-8">
