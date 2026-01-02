@@ -1,6 +1,6 @@
 // app/api/item-requests/route.js
-const { connectDB } = require("@/lib/mongodb");
-const { ItemRequest } = require("@/models/itemreqModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { ItemRequest } = require("../../models/itemreqModels");
 
 // ---------------------------------------------
 // --- GET: Fetch all item requests ------------

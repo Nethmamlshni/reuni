@@ -1,6 +1,6 @@
 // app/api/item-requests/category/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { ItemRequest } = require('@/models/itemreqModels');
+const { connectDB } = require('../../../../lib/mongodb');
+const { ItemRequest } = require('../../../models/itemreqModels');
 
 async function GET(req) {
   await connectDB();

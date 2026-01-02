@@ -1,6 +1,6 @@
 // app/api/browseoffer/count/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { BrowserOffer } = require('@/models/browseofferModels');
+const { connectDB } = require('../../../../lib/mongodb');
+const { BrowserOffer } = require('../../../models/browseofferModel');
 const mongoose = require('mongoose');
 
 async function GET(req) {
