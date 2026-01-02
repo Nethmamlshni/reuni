@@ -1,62 +1,47 @@
-import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
-import { User } from '@/models/userModels';
-import bcrypt from 'bcryptjs';
-import { generateToken } from '@/lib/jwt';
+import { connectDB } from "@/lib/mongodb";
+import { User } from "@/models/userModels";
+import bcrypt from "bcryptjs";
 
 // ---------------------------------------------
-// --- POST: User Login -------------------------
+// --- POST: Reset Password --------------------
 // ---------------------------------------------
-export async function POST(request) {
+export async function POST(req) {
   await connectDB();
 
-  const { email, password } = await request.json();
+  const { token, password } = await req.json();
 
-  if (!email || !password) {
-    return NextResponse.json(
-      { message: 'Email and password required' },
+  if (!token || !password) {
+    return new Response(
+      JSON.stringify({ error: "Token and password required" }),
       { status: 400 }
     );
   }
 
-  const user = await User.findOne({ email });
+  // Find user with valid token
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: new Date() },
+  });
+
   if (!user) {
-    return NextResponse.json(
-      { message: 'User not found' },
-      { status: 404 }
+    return new Response(
+      JSON.stringify({ error: "Invalid or expired token" }),
+      { status: 400 }
     );
   }
 
-  const isMatch = await bcrypt.compare(password, user.password || '');
-  if (!isMatch) {
-    return NextResponse.json(
-      { message: 'Invalid password' },
-      { status: 401 }
-    );
-  }
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const token = generateToken({
-    id: user._id.toString(),
-    email: user.email,
-  });
+  // Update user password and remove token
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
 
-  const response = NextResponse.json({
-    message: 'Login successful',
-    user: {
-      id: user._id,
-      name: user.firstname,
-      email: user.email,
-    },
-  });
+  await user.save();
 
-  // Set httpOnly cookie (expires in 7 days)
-  response.cookies.set('token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: 7 * 24 * 60 * 60, // 7 days
-    sameSite: 'strict',
-  });
-
-  return response;
+  return new Response(
+    JSON.stringify({ success: true, message: "Password has been reset" }),
+    { status: 200 }
+  );
 }
