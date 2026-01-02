@@ -1,21 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    },
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "ignoreDeprecations": "6.0" // Add this line to silence the error
-  },
-  "include": ["**/*.js", "**/*.jsx"],
-  "exclude": ["node_modules"]
+      "@/*": ["./src/*"]
+    }
+  }
 }
