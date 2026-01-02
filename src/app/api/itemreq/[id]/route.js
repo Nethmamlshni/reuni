@@ -1,46 +1,58 @@
 // app/api/itemreq/[id]/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { ItemRequest } = require('@/models/itemreqModels');
+const { connectDB } = require('../../../../lib/mongodb');
+const { ItemRequest } = require('../../../models/itemreqModels');
 
-async function GET(_, { params }) {
+export async function GET(_, { params }) {
   try {
     await connectDB();
-    const id = params.id;
 
-    // Try fetching single request by ID
-    const request = await ItemRequest.findById(id).populate('userId');
+    // ✅ params is a Promise
+    const { id } = await params;
+    const cleanId = id.trim(); // ✅ remove spaces
+
+    // Try fetching single request by _id
+    const request = await ItemRequest
+      .findById(cleanId)
+      .populate("userId");
+
     if (request) {
       return new Response(JSON.stringify(request), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    // If not found, try fetching all requests by this userId
-    const userRequests = await ItemRequest.find({ userId: id }).sort({ createdAt: -1 });
+    // If not found, try fetching all requests by userId
+    const userRequests = await ItemRequest
+      .find({ userId: cleanId })
+      .sort({ createdAt: -1 });
+
     if (userRequests.length > 0) {
       return new Response(JSON.stringify(userRequests), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    return new Response(JSON.stringify({ message: 'No matching request found' }), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ message: "No matching request found" }),
+      { status: 404, headers: { "Content-Type": "application/json" } }
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ message: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error("GET /api/itemreq/[id] error:", error);
+
+    return new Response(
+      JSON.stringify({ message: error.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
 
 async function PUT(req, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
+    const cleanId = id.trim();
     const body = await req.json();
 
     // Normalize tags if comma-separated string
@@ -51,7 +63,7 @@ async function PUT(req, { params }) {
         .filter((t) => t.length > 0);
     }
 
-    const updated = await ItemRequest.findByIdAndUpdate(id, body, {
+    const updated = await ItemRequest.findByIdAndUpdate(cleanId, body, {
       new: true,
       runValidators: true,
     });
