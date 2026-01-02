@@ -1,9 +1,9 @@
 // app/api/search/route.js
-const { connectDB } = require("@/lib/mongodb");
-const { Item } = require("@/models/itemofferModels");
-const { ItemRequest } = require("@/models/itemreqModels");
-const { BreqItemModel } = require("@/models/browsereqModels");
-const { BrowserOffer } = require("@/models/browseofferModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { Item } = require("../../models/itemofferModels");
+const { ItemRequest } = require("../../models/itemreqModels");
+const { BreqItemModel } = require("../../models/browsereqModels");
+const { BrowserOffer } = require("../../models/browseofferModel");
 
 async function GET(req) {
   const { searchParams } = new URL(req.url);

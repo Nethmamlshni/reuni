@@ -1,6 +1,6 @@
 // app/api/browsereq/count/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { BreqItemModel } = require('@/models/browsereqModels');
+const { connectDB } = require('../../../lib/mongodb');
+const { BreqItemModel } = require('../../models/browsereqModels');
 const mongoose = require('mongoose');
 
 async function GET(req) {
