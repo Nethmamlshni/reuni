@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '../../../lib/mongodb';
+import { connectDB } from '../../../../lib/mongodb';
 import { User } from '../../../models/userModels';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../../../lib/jwt';
+import { generateToken } from '../../../../lib/jwt';
 
 // ---------------------------------------------
 // --- POST: User Login -------------------------
