@@ -1,7 +1,7 @@
 // app/api/emailCode/route.js
-const { connectDB } = require('../../lib/mongodb');
+const { connectDB } = require('../../../lib/mongodb');
 const { EmailCode } = require('../../models/emailModels');
-const { sendEmail } = require('../../lib/sendEmail');
+const { sendEmail } = require('../../../lib/sendEmail');
 const crypto = require('crypto');
 
 async function POST(req) {

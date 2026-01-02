@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { connectDB } from "../../../lib/mongodb";
+import { connectDB } from "../../../../lib/mongodb";
 import { User } from "../../../models/userModels";
-import { sendpasswordEmail } from "../../../lib/resetemail";
+import { sendpasswordEmail } from "../../../../lib/resetemail";
 
 // ---------------------------------------------
 // --- POST: Forgot Password -------------------

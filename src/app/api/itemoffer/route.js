@@ -1,8 +1,8 @@
 // /app/api/itemoffer/route.js
 import { NextResponse } from "next/server";
-import { connectDB } from "../../lib/mongodb";
+import { connectDB } from "../../../lib/mongodb";
 import { Item } from "../../models/itemofferModels";
-import cloudinary from "../../lib/cloudinary";
+import cloudinary from "../../../lib/cloudinary";
 
 // ---------------------------------------------
 // GET: Fetch all item offers

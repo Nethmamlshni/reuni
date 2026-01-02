@@ -1,7 +1,7 @@
 // app/api/itemoffer/[id]/route.js
-const { connectDB } = require('../../../lib/mongodb');
+const { connectDB } = require('../../../../lib/mongodb');
 const { Item } = require('../../../models/itemofferModels');
-const cloudinary = require('../../../lib/cloudinary');
+const cloudinary = require('../../../../lib/cloudinary');
 
 // ---------------------------------------------
 // --- GET: Fetch item offer by ID -------------

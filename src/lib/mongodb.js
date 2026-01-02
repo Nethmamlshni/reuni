@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -15,7 +15,7 @@ export async function connectDB() {
 
   try {
     await mongoose.connect(MONGO_URI, {
-      dbName: 'share-mate',
+      dbName: "share-mate",
     });
     isConnected = true;
     console.log("MongoDB connected");
@@ -24,3 +24,4 @@ export async function connectDB() {
     throw error;
   }
 }
+
