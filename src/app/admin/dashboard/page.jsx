@@ -20,10 +20,10 @@ export default function UniversityDashboard() {
     ];
 
     const dummyRecentActivity = [
-        { id: 1, action: 'Item returned', item: 'Microscope', user: 'John Doe', time: '2 hours ago' },
-        { id: 2, action: 'New listing created', item: 'Yoga Mat', user: 'Lisa Kim', time: '5 hours ago' },
-        { id: 3, action: 'Request approved', item: 'Sound System', user: 'David Ross', time: '1 day ago' },
-        { id: 4, action: 'Item borrowed', item: 'Tent', user: 'Emma Lee', time: '1 day ago' },
+        { id: 1, action: 'Item returned', item: 'Microscope', user: 'Lakshika Karunarathne', time: '2 hours ago' },
+        { id: 2, action: 'New listing created', item: 'Yoga Mat', user: 'Nisal Gamage', time: '5 hours ago' },
+        { id: 3, action: 'Request approved', item: 'Sound System', user: 'Sanduni rajapakshe', time: '1 day ago' },
+        { id: 4, action: 'Item borrowed', item: 'Tent', user: 'Jayantha senanayaka', time: '1 day ago' },
     ];
 
     const dummyStats = {
