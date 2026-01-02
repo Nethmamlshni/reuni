@@ -106,7 +106,7 @@ export default function Catalog() {
             category: 'Books',
             description: 'Second edition, minimal highlighting, excellent condition',
             availability: 'Available',
-            owner: 'Sarah M.',
+            owner: 'Sanduni kumarasiri',
             image: '📚',
         },
         {
@@ -115,7 +115,7 @@ export default function Catalog() {
             category: 'Electronics',
             description: 'Adjustable aluminum laptop stand, improves posture',
             availability: 'Available',
-            owner: 'John D.',
+            owner: 'Janith perera',
             image: '💻',
         },
         {
@@ -124,7 +124,7 @@ export default function Catalog() {
             category: 'Safety Equipment',
             description: 'UV protection lab goggles for chemistry practicals',
             availability: 'Borrowed',
-            owner: 'Emma L.',
+            owner: 'Imasha Fernando',
             image: '🥽',
         },
         {
@@ -133,7 +133,7 @@ export default function Catalog() {
             category: 'Electronics',
             description: 'TI-84 Plus calculator with cover',
             availability: 'Available',
-            owner: 'Mike R.',
+            owner: 'Malki Silva',
             image: '🧮',
         },
         {
@@ -142,7 +142,7 @@ export default function Catalog() {
             category: 'Stationery',
             description: 'Complete set with compass, protractor, and rulers',
             availability: 'Available',
-            owner: 'Lisa K.',
+            owner: 'Lasith Malinga',
             image: '📐',
         },
         {
@@ -151,7 +151,7 @@ export default function Catalog() {
             category: 'Electronics',
             description: 'Wireless lavalier microphone, great for recordings',
             availability: 'Available',
-            owner: 'David P.',
+            owner: 'Devinda Jayarathna,
             image: '🎤',
         },
         {
@@ -160,7 +160,7 @@ export default function Catalog() {
             category: 'Books',
             description: 'Comprehensive guide for Cell Biology course',
             availability: 'Borrowed',
-            owner: 'Rachel T.',
+            owner: 'Runali Mahagamage',
             image: '📖',
         },
         {
@@ -169,7 +169,7 @@ export default function Catalog() {
             category: 'Electronics',
             description: '7-in-1 USB-C hub with HDMI and card reader',
             availability: 'Available',
-            owner: 'Tom W.',
+            owner: 'Thulanga Ambagahawaththa',
             image: '🔌',
         },
     ];
@@ -178,29 +178,7 @@ export default function Catalog() {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* Navigation */}
-            <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex justify-between items-center">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                            </div>
-                            <span className="text-lg font-bold text-gray-900">UniShare</span>
-                        </Link>
-
-                        <div className="hidden md:flex items-center gap-8">
-                            <Link href="/catalog" className="text-sm font-medium text-gray-900 transition-colors">Catalog</Link>
-                            <Link href="/#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">FAQ</Link>
-                            <Link href="/#about" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">About Us</Link>
-                            <Link href="/register" className="px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all">Register</Link>
-                            <Link href="/login" className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-all">Login</Link>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+           
 
             {/* Header */}
             <section className="py-12 px-6 bg-gray-50 border-b border-gray-200">
@@ -285,29 +263,7 @@ export default function Catalog() {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="py-8 px-6 border-t border-gray-200 bg-white mt-12">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                            </div>
-                            <span className="text-sm font-bold text-gray-900">UniShare</span>
-                        </div>
-
-                        <div className="flex gap-8">
-                            <a href="#" className="text-xs text-gray-600 hover:text-gray-900 transition-colors">Privacy Policy</a>
-                            <a href="#" className="text-xs text-gray-600 hover:text-gray-900 transition-colors">Terms of Service</a>
-                            <a href="#" className="text-xs text-gray-600 hover:text-gray-900 transition-colors">Contact Us</a>
-                        </div>
-
-                        <p className="text-xs text-gray-500">© 2026 UniShare. All rights reserved.</p>
-                    </div>
-                </div>
-            </footer>
+          
         </div>
     );
 }
