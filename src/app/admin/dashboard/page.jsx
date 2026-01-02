@@ -2,108 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function UniversityDashboard() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState('overview');
     const [stats, setStats] = useState({ totalItems: 0, activeUsers: 0, pendingRequests: 0, activeBorrows: 0 });
     const [pendingRequests, setPendingRequests] = useState([]);
     const [recentActivity, setRecentActivity] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    
- const dummyPendingRequests = [
-  {
-    id: 4,
-    item: 'Chemistry Lab Coat',
-    requester: 'Nimal Perera',
-    studentId: 'UWU/ICT/22/041',
-    email: 'nimal.p@university.edu',
-    date: 'Jan 3, 2026',
-    type: 'Student',
-    owner: 'Department of Chemistry',
-  },
-  {
-    id: 5,
-    item: 'Engineering Safety Boots',
-    requester: 'Kasun Wijesinghe',
-    studentId: 'UWU/ICT/22/058',
-    email: 'kasun.w@university.edu',
-    date: 'Jan 3, 2026',
-    type: 'Student',
-    owner: 'Civil Engineering Lab',
-  },
-  {
-    id: 6,
-    item: 'Casio FX-991EX Calculator',
-    requester: 'Sanduni Jayawardena',
-    studentId: 'UWU/ICT/22/073',
-    email: 'sanduni.j@university.edu',
-    date: 'Jan 2, 2026',
-    type: 'Student',
-    owner: 'Maths Society',
-  },
-  {
-    id: 7,
-    item: 'Digital Multimeter',
-    requester: 'Isuru Madushan',
-    email: 'isuru.m@university.edu',
-    date: 'Jan 2, 2026',
-    type: 'University',
-  },
-  {
-    id: 8,
-    item: 'Field Survey Measuring Tape',
-    requester: 'Ruwan Karunaratne',
-    email: 'ruwan.k@university.edu',
-    date: 'Jan 1, 2026',
-    type: 'University',
-  },
-];
+    // Dummy data as fallback
+    const dummyPendingRequests = [
+        { id: 1, item: 'DSLR Camera', requester: 'Sarah Johnson', email: 'sarah.j@university.edu', date: 'Jan 2, 2026', type: 'University' },
+        { id: 2, item: 'Calculus Textbook', requester: 'Mike Thompson', email: 'mike.t@university.edu', date: 'Jan 2, 2026', type: 'Student', owner: 'Emma L.' },
+        { id: 3, item: 'Projector', requester: 'Alex Chen', email: 'alex.c@university.edu', date: 'Jan 1, 2026', type: 'University' },
+    ];
 
-
-const dummyRecentActivity = [
-  {
-    id: 5,
-    action: 'Item borrowed',
-    item: 'Engineering Helmet',
-    user: 'Kasun Wijesinghe',
-    studentId: 'UWU/ICT/22/058',
-    time: '1 hour ago',
-  },
-  {
-    id: 6,
-    action: 'Item returned',
-    item: 'Drawing Board Set',
-    user: 'Ruwan Karunaratne',
-    studentId: 'UWU/ICT/22/091',
-    time: '4 hours ago',
-  },
-  {
-    id: 7,
-    action: 'New listing created',
-    item: 'Rain Boots',
-    user: 'Ayesha Fernando',
-    studentId: 'UWU/ICT/22/066',
-    time: '6 hours ago',
-  },
-  {
-    id: 8,
-    action: 'Request approved',
-    item: 'Chemistry Lab Glassware Set',
-    user: 'Department of Chemistry',
-    time: '12 hours ago',
-  },
-  {
-    id: 9,
-    action: 'Item reserved',
-    item: 'Field Work Backpack',
-    user: 'Sanduni Jayawardena',
-    studentId: 'UWU/ICT/22/073',
-    time: '1 day ago',
-  },
-];
-
-
+    const dummyRecentActivity = [
+        { id: 1, action: 'Item returned', item: 'Microscope', user: 'John Doe', time: '2 hours ago' },
+        { id: 2, action: 'New listing created', item: 'Yoga Mat', user: 'Lisa Kim', time: '5 hours ago' },
+        { id: 3, action: 'Request approved', item: 'Sound System', user: 'David Ross', time: '1 day ago' },
+        { id: 4, action: 'Item borrowed', item: 'Tent', user: 'Emma Lee', time: '1 day ago' },
+    ];
 
     const dummyStats = {
         totalItems: 24,
@@ -177,9 +98,34 @@ const dummyRecentActivity = [
         }
     };
 
+    const handleAddNewItem = () => {
+        router.push('/university-list-item');
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
-        
+            {/* Navigation */}
+            <nav className="bg-white border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                    <div className="flex justify-between items-center">
+                        <Link href="/" className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                </svg>
+                            </div>
+                            <span className="text-lg font-bold text-gray-900">UniShare</span>
+                        </Link>
+
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm text-gray-600">Admin Dashboard</span>
+                            <div className="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-bold text-white">AD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
 
             <div className="max-w-7xl mx-auto px-6 py-8">
                 {/* Header */}
@@ -305,7 +251,10 @@ const dummyRecentActivity = [
                                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                                     <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
                                     <div className="space-y-3">
-                                        <button className="w-full px-4 py-3 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all text-left flex items-center justify-between">
+                                        <button 
+                                            onClick={handleAddNewItem}
+                                            className="w-full px-4 py-3 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all text-left flex items-center justify-between"
+                                        >
                                             <span>Add New University Item</span>
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -396,7 +345,10 @@ const dummyRecentActivity = [
                             <div className="bg-white rounded-xl border border-gray-200 p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h3 className="text-lg font-bold text-gray-900">All Platform Items</h3>
-                                    <button className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all">
+                                    <button 
+                                        onClick={handleAddNewItem}
+                                        className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all"
+                                    >
                                         Add New Item
                                     </button>
                                 </div>
