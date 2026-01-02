@@ -151,7 +151,7 @@ export default function Catalog() {
             category: 'Electronics',
             description: 'Wireless lavalier microphone, great for recordings',
             availability: 'Available',
-            owner: 'Devinda Jayarathna,
+            owner: 'Devinda Jayarathna',
             image: '🎤',
         },
         {
