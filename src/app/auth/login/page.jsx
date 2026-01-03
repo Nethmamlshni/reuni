@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function Login() {
     const router = useRouter();
@@ -36,6 +37,8 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('token', data.user.token);
 
+            toast.success('Login successful!');
+            
             router.push('/student/dashboard');
 
         } catch (err) {
