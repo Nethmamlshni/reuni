@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { User } from "@/models/userModels";
+import { connectDB } from "../../../../lib/mongodb";
+import { User } from "../../../models/userModels";
 import bcrypt from "bcryptjs";
-import { verifyToken } from "@/lib/jwt";
-import cloudinary from "../../../lib/cloudinary";
+import { verifyToken } from "../../../../lib/jwt";
+import cloudinary from "../../../../lib/cloudinary";
 
 // ---------------------------------------------
 // --- GET: Fetch User by Token ----------------  
@@ -64,7 +64,7 @@ export async function PUT(request, context) {
   try {
     await connectDB();
 
-    const { id: userId } = context.params;
+   const { id: userId } = await context.params;
     const {
       firstname,
       lastname,

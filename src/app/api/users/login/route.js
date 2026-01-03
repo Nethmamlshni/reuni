@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
-import { User } from '@/models/userModels';
+import { connectDB } from '../../../../lib/mongodb';
+import { User } from '../../../models/userModels';
 import bcrypt from 'bcryptjs';
-import { generateToken } from '@/lib/jwt';
+import { generateToken } from '../../../../lib/jwt';
 
 // ---------------------------------------------
 // --- POST: User Login -------------------------
@@ -46,6 +46,8 @@ export async function POST(request) {
       id: user._id,
       name: user.firstname,
       email: user.email,
+      role: user.role,
+      token: token,
     },
   });
 
