@@ -1,8 +1,8 @@
 // /app/api/browse/all/route.js
-import { connectDB } from "@/lib/mongodb";
-import { ItemRequest } from "@/models/itemreqModels";
-import { Item } from "@/models/itemofferModels";
-import "@/models/userModels"; // Ensure User model is registered for populate
+import { connectDB } from "../../../lib/mongodb";
+import { ItemRequest } from "../models/itemreqModels";
+import { Item } from "../models/itemofferModels";
+import "../models/userModels"; // Ensure User model is registered for populate
 import { NextResponse } from "next/server";
 
 export async function GET() {

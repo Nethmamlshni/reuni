@@ -2,10 +2,10 @@
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 
-import { Item } from '@/models/itemofferModels';
-import { ItemRequest } from '@/models/itemreqModels';
-import { BrowserOffer } from '@/models/browseofferModels';
-import { BreqItemModel } from '@/models/browsereqModels';
+import { Item } from '../models/itemofferModels';
+import { ItemRequest } from '../models/itemreqModels';
+import { BrowserOffer } from '../models/browseofferModels';
+import { BreqItemModel } from '../models/browsereqModels';
 
 async function connectDB() {
   if (mongoose.connection.readyState === 0) {

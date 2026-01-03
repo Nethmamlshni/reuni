@@ -1,10 +1,10 @@
 // app/api/stats/category/route.js
 const { NextResponse } = require("next/server");
-const { connectDB } = require("@/lib/mongodb");
-const { BreqItemModel } = require("@/models/browsereqModels");
-const { BrowserOffer } = require("@/models/browseofferModels");
-const { Item } = require("@/models/itemofferModels");
-const { ItemRequest } = require("@/models/itemreqModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { BreqItemModel } = require("../../../models/browsereqModels");
+const { BrowserOffer } = require("../../../models/browseofferModels");
+const { Item } = require("../../../models/itemofferModels");
+const { ItemRequest } = require("../../../models/itemreqModels");
 
 async function GET(req) {
   try {
