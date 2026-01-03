@@ -1,11 +1,11 @@
 // /app/api/admin/overview/route.js
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { User } from "@/models/userModels";
-import { ItemRequest } from "@/models/itemreqModels";
-import { BrowserOffer } from "@/models/browseofferModels";
-import { Item } from "@/models/itemofferModels";
-import { BreqItemModel } from "@/models/browsereqModels";
+import { connectDB } from "../../../lib/mongodb";
+import { User } from "../../models/userModels";
+import { ItemRequest } from "../../models/itemreqModels";
+import { BrowserOffer } from "../../models/browseofferModels";
+import { Item } from "../../models/itemofferModels";
+import { BreqItemModel } from "../../models/browsereqModels";
 
 export const GET = async () => {
   try {

@@ -1,9 +1,9 @@
 // app/api/offer&req/route.js
-const { connectDB } = require("@/lib/mongodb");
-const { BreqItemModel } = require("@/models/browsereqModels");
-const { BrowserOffer } = require("@/models/browseofferModels");
-const { Item } = require("@/models/itemofferModels");
-const { ItemRequest } = require("@/models/itemreqModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { BreqItemModel } = require("../../../models/browsereqModels");
+const { BrowserOffer } = require("../../../models/browseofferModel");
+const { Item } = require("../../../models/itemofferModels");
+const { ItemRequest } = require("../../../models/itemreqModels");
 const mongoose = require("mongoose");
 
 async function GET(req) {

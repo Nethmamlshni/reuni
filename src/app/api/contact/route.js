@@ -1,6 +1,6 @@
 // app/api/contact/route.js
-const { connectDB } = require('@/lib/mongodb');
-const { ContactModel } = require('@/models/contactModels');
+const { connectDB } = require('../../../lib/mongodb');
+const { ContactModel } = require('../../../models/contactModels');
 const nodemailer = require('nodemailer');
 
 async function POST(req) {
