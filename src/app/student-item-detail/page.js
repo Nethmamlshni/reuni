@@ -3,70 +3,32 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-export default function ItemDetail() {
-    // Dummy item data
-    const item = {
-        id: 1,
-        name: 'DSLR Camera',
-        category: 'Electronics',
-        type: 'University Item',
-        description: 'Professional Canon DSLR camera with 24-70mm lens. Perfect for photography projects, event coverage, and academic documentation. Includes camera body, lens, battery charger, and carrying case.',
-        availability: 'Available',
-        image: '📷',
-        location: 'Equipment Room, Building A, Room 105',
-        startDate: '2026-09-01',
-        endDate: '2026-12-15',
-        condition: 'Excellent',
-    };
+export default function CreateItemRequest() {
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Removed user personal details from state
+    // Form state matching your ItemRequest Schema
     const [formData, setFormData] = useState({
+        title: '',
+        category: '',
+        description: '',
         purpose: '',
-        startDate: '',
-        endDate: '',
-        agreeToTerms: false,
+        neededByDate: '',
+        flexibleDate: false,
+        urgencyLevel: '',
+        durationNeeded: '',
+        pickupLocation: '',
+        flexibleLocation: false,
+        specialInstructions: '',
+        tags: '', 
+        termsAgreed: false,
     });
 
     const [errors, setErrors] = useState({});
-    const [showForm, setShowForm] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // Basic validation
-        const newErrors = {};
-
-        // Removed Name and Email validation checks
-
-        if (!formData.purpose) {
-            newErrors.purpose = 'Purpose is required';
-        }
-
-        if (!formData.startDate) {
-            newErrors.startDate = 'Start date is required';
-        }
-
-        if (!formData.endDate) {
-            newErrors.endDate = 'End date is required';
-        }
-
-        if (!formData.agreeToTerms) {
-            newErrors.agreeToTerms = 'You must agree to the terms';
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
-
-        // Handle form submission
-        // Note: In a real app, you would grab the userId from your auth context here
-        console.log('Request submitted:', { item: item.name, ...formData });
-        alert(`Request submitted for ${item.name}! You will receive a confirmation email shortly.`);
-        setShowForm(false);
-    };
-
+    // Handle Input Changes
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -74,203 +36,330 @@ export default function ItemDetail() {
             [name]: type === 'checkbox' ? checked : value,
         });
 
-        // Clear error when user starts typing
         if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: '',
-            });
+            setErrors({ ...errors, [name]: '' });
         }
     };
 
+    // Submit Handler
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrors({});
+
+        // --- Validation ---
+        const newErrors = {};
+
+        if (!formData.title || formData.title.length < 3) 
+            newErrors.title = 'Title must be at least 3 characters';
+        
+        if (!formData.category) newErrors.category = 'Category is required';
+        if (!formData.description) newErrors.description = 'Description is required';
+        if (!formData.purpose) newErrors.purpose = 'Purpose is required';
+        
+        if (!formData.neededByDate) {
+            newErrors.neededByDate = 'Date is required';
+        } else {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            if (new Date(formData.neededByDate) < today) {
+                newErrors.neededByDate = 'Date cannot be in the past';
+            }
+        }
+
+        if (!formData.urgencyLevel) newErrors.urgencyLevel = 'Urgency level is required';
+        if (!formData.durationNeeded) newErrors.durationNeeded = 'Duration is required';
+        if (!formData.pickupLocation) newErrors.pickupLocation = 'Location is required';
+        if (!formData.termsAgreed) newErrors.termsAgreed = 'You must agree to the terms';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            window.scrollTo(0, 0); 
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Transform tags string to Array
+            const tagsArray = formData.tags
+                ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+                : [];
+
+            // Construct Payload
+            const payload = {
+                ...formData,
+                tags: tagsArray,
+                // MOCK USER ID: Replace with actual auth session ID in production
+                userId: "654321999999999999999999", 
+            };
+
+            const response = await fetch('/api/itemreq', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || data.details || 'Failed to submit request');
+            }
+
+            alert('Request submitted successfully!');
+            router.push('/student-dashboard'); 
+
+        } catch (error) {
+            console.error('Submission Error:', error);
+            alert(`Error: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const inputClass = (error) => `w-full px-4 py-3 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-gray-300'}`;
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            {/* Navbar Placeholder */}
+            <nav className="bg-white border-b border-gray-200 px-6 py-4 mb-8">
+                <div className="max-w-3xl mx-auto flex items-center justify-between">
+                    <span className="text-xl font-bold text-gray-900">UniShare</span>
+                    <Link href="/student-dashboard" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+                        Cancel & Exit
+                    </Link>
+                </div>
+            </nav>
 
-            {/* Main Content */}
-            <div className="max-w-6xl mx-auto px-6 py-8">
-                <Link href="/catalog" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-6">
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Back to Catalog
-                </Link>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Item Details */}
-                    <div className="space-y-6">
-                        {/* Item Image & Basic Info */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-8">
-                            <div className="w-full aspect-square bg-gray-100 rounded-xl flex items-center justify-center mb-6">
-                                <span className="text-9xl">{item.image}</span>
-                            </div>
-
-                            <div className="flex items-center justify-between mb-4">
-                                <span className={`px-4 py-2 rounded-full text-sm font-semibold ${item.availability === 'Available'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-gray-100 text-gray-600'
-                                    }`}>
-                                    {item.availability}
-                                </span>
-                                <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
-                                    {item.type}
-                                </span>
-                            </div>
-
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">{item.name}</h1>
-                            <p className="text-gray-600 mb-4">{item.category}</p>
-
-                            <p className="text-gray-700 leading-relaxed">{item.description}</p>
-                        </div>
-
-                    
-
-                        {/* Additional Info */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                            <h2 className="text-lg font-bold text-gray-900 mb-4">Additional Information</h2>
-                            <div className="space-y-3">
-                                <div>
-                                    <p className="text-sm text-gray-600 mb-1">Pickup Location</p>
-                                    <p className="font-medium text-gray-900">{item.location}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-600 mb-1">Start Date</p>
-                                    <p className="font-medium text-gray-900">{item.startDate}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-600 mb-1">End Date</p>
-                                    <p className="font-medium text-gray-900">{item.endDate}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-600 mb-1">Condition</p>
-                                    <p className="font-medium text-gray-900">{item.condition}</p>
-                                </div>
-                            </div>
-                        </div>
+            <main className="flex-1 px-6 pb-12">
+                <div className="max-w-3xl mx-auto">
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Request an Item</h1>
+                        <p className="text-gray-600">Tell the community what you need, and we'll help you find it.</p>
                     </div>
 
-                    {/* Request Form */}
-                    <div className="lg:sticky lg:top-8 h-fit">
-                        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Request This Item</h2>
-                            <p className="text-gray-600 mb-6">Fill out the details below to request this item</p>
-
-                            {!showForm ? (
-                                <button
-                                    onClick={() => setShowForm(true)}
-                                    disabled={item.availability !== 'Available'}
-                                    className={`w-full px-6 py-3 rounded-lg font-medium transition-all ${item.availability === 'Available'
-                                        ? 'bg-gray-900 text-white hover:bg-gray-800'
-                                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        }`}
-                                >
-                                    {item.availability === 'Available' ? 'Request Item' : 'Currently Unavailable'}
-                                </button>
-                            ) : (
-                                <form onSubmit={handleSubmit} className="space-y-4">
-
-                                    {/* Purpose Field */}
+                    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                        <form onSubmit={handleSubmit} className="space-y-8">
+                            
+                            {/* --- Item Details --- */}
+                            <div>
+                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                                    Item Details
+                                </h2>
+                                <div className="space-y-4">
+                                    {/* Title */}
                                     <div>
-                                        <label htmlFor="purpose" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Purpose of Use *
-                                        </label>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Request Title *</label>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            value={formData.title}
+                                            onChange={handleChange}
+                                            placeholder="e.g., Scientific Calculator for Exam"
+                                            className={inputClass(errors.title)}
+                                        />
+                                        {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+                                    </div>
+
+                                    {/* Category */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Category *</label>
+                                        <select
+                                            name="category"
+                                            value={formData.category}
+                                            onChange={handleChange}
+                                            className={inputClass(errors.category)}
+                                        >
+                                            <option value="">Select Category...</option>
+                                            <option value="Electronics">Electronics</option>
+                                            <option value="Books">Books</option>
+                                            <option value="Clothing">Clothing</option>
+                                            <option value="Tools">Tools</option>
+                                            <option value="Stationery">Stationery</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
+                                    </div>
+
+                                    {/* Description */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Description *</label>
                                         <textarea
-                                            id="purpose"
+                                            name="description"
+                                            value={formData.description}
+                                            onChange={handleChange}
+                                            rows={3}
+                                            placeholder="Describe the specific item you are looking for..."
+                                            className={`${inputClass(errors.description)} resize-none`}
+                                        />
+                                        {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
+                                    </div>
+
+                                    {/* Purpose */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Purpose *</label>
+                                        <textarea
                                             name="purpose"
                                             value={formData.purpose}
                                             onChange={handleChange}
-                                            required
-                                            rows={3}
-                                            placeholder="Describe how you plan to use this item"
-                                            className={`w-full px-4 py-2.5 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all resize-none ${errors.purpose ? 'border-red-500' : 'border-gray-300'
-                                                }`}
+                                            rows={2}
+                                            placeholder="Why do you need this item?"
+                                            className={`${inputClass(errors.purpose)} resize-none`}
                                         />
-                                        {errors.purpose && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.purpose}</p>
-                                        )}
+                                        {errors.purpose && <p className="mt-1 text-sm text-red-600">{errors.purpose}</p>}
                                     </div>
+                                </div>
+                            </div>
 
-                                    {/* Date Fields */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label htmlFor="startDate" className="block text-sm font-medium text-gray-900 mb-2">
-                                                Start Date *
-                                            </label>
-                                            <input
-                                                type="date"
-                                                id="startDate"
-                                                name="startDate"
-                                                value={formData.startDate}
-                                                onChange={handleChange}
-                                                required
-                                                className={`w-full px-4 py-2.5 bg-white border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${errors.startDate ? 'border-red-500' : 'border-gray-300'}`}
-                                            />
-                                            {errors.startDate && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.startDate}</p>
-                                            )}
-                                        </div>
-
-                                        <div>
-                                            <label htmlFor="endDate" className="block text-sm font-medium text-gray-900 mb-2">
-                                                End Date *
-                                            </label>
-                                            <input
-                                                type="date"
-                                                id="endDate"
-                                                name="endDate"
-                                                value={formData.endDate}
-                                                onChange={handleChange}
-                                                required
-                                                className={`w-full px-4 py-2.5 bg-white border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${errors.endDate ? 'border-red-500' : 'border-gray-300'}`}
-                                            />
-                                            {errors.endDate && (
-                                                <p className="mt-1 text-sm text-red-600">{errors.endDate}</p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Terms Checkbox */}
-                                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                                        <label className="flex items-start gap-2 cursor-pointer">
+                            {/* --- Logistics --- */}
+                            <div>
+                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                                    Logistics & Timing
+                                </h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    
+                                    {/* Needed By Date */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Needed By Date *</label>
+                                        <input
+                                            type="date"
+                                            name="neededByDate"
+                                            value={formData.neededByDate}
+                                            onChange={handleChange}
+                                            className={inputClass(errors.neededByDate)}
+                                        />
+                                        {errors.neededByDate && <p className="mt-1 text-sm text-red-600">{errors.neededByDate}</p>}
+                                        <label className="flex items-center gap-2 mt-2 cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                name="agreeToTerms"
-                                                checked={formData.agreeToTerms}
+                                                name="flexibleDate"
+                                                checked={formData.flexibleDate}
                                                 onChange={handleChange}
-                                                className={`mt-0.5 w-4 h-4 border-gray-300 rounded text-gray-900 focus:ring-gray-900 ${errors.agreeToTerms ? 'border-red-500' : ''
-                                                    }`}
+                                                className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
                                             />
-                                            <span className="text-xs text-gray-700">
-                                                I agree to return the item in good condition by the specified date and follow all borrowing guidelines.
-                                            </span>
+                                            <span className="text-xs text-gray-600">I am flexible with this date</span>
                                         </label>
-                                        {errors.agreeToTerms && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.agreeToTerms}</p>
-                                        )}
                                     </div>
 
-                                    {/* Action Buttons */}
-                                    <div className="flex gap-3 pt-2">
-                                        <button
-                                            type="submit"
-                                            className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all"
+                                    {/* Urgency Level */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Urgency Level *</label>
+                                        <select
+                                            name="urgencyLevel"
+                                            value={formData.urgencyLevel}
+                                            onChange={handleChange}
+                                            className={inputClass(errors.urgencyLevel)}
                                         >
-                                            Submit Request
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowForm(false)}
-                                            className="px-6 py-3 bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-all"
-                                        >
-                                            Cancel
-                                        </button>
+                                            <option value="">Select Level...</option>
+                                            <option value="Low">Low (Whenever possible)</option>
+                                            <option value="Medium">Medium (Need soon)</option>
+                                            <option value="High">High (Urgent/Emergency)</option>
+                                        </select>
+                                        {errors.urgencyLevel && <p className="mt-1 text-sm text-red-600">{errors.urgencyLevel}</p>}
                                     </div>
-                                </form>
-                            )}
-                        </div>
+
+                                    {/* Duration Needed */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Duration Needed *</label>
+                                        <input
+                                            type="text"
+                                            name="durationNeeded"
+                                            value={formData.durationNeeded}
+                                            onChange={handleChange}
+                                            placeholder="e.g., 2 days, 1 week"
+                                            className={inputClass(errors.durationNeeded)}
+                                        />
+                                        {errors.durationNeeded && <p className="mt-1 text-sm text-red-600">{errors.durationNeeded}</p>}
+                                    </div>
+
+                                    {/* Pickup Location */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-900 mb-2">Preferred Location *</label>
+                                        <input
+                                            type="text"
+                                            name="pickupLocation"
+                                            value={formData.pickupLocation}
+                                            onChange={handleChange}
+                                            placeholder="e.g., Main Library"
+                                            className={inputClass(errors.pickupLocation)}
+                                        />
+                                        {errors.pickupLocation && <p className="mt-1 text-sm text-red-600">{errors.pickupLocation}</p>}
+                                        <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                name="flexibleLocation"
+                                                checked={formData.flexibleLocation}
+                                                onChange={handleChange}
+                                                className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                                            />
+                                            <span className="text-xs text-gray-600">I am flexible with location</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Special Instructions */}
+                                <div className="mt-6">
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Special Instructions (Optional)</label>
+                                    <textarea
+                                        name="specialInstructions"
+                                        value={formData.specialInstructions}
+                                        onChange={handleChange}
+                                        rows={2}
+                                        placeholder="Any specific requirements..."
+                                        className={`${inputClass(false)} resize-none`}
+                                    />
+                                </div>
+
+                                {/* Tags */}
+                                <div className="mt-4">
+                                    <label className="block text-sm font-medium text-gray-900 mb-2">Tags (Optional)</label>
+                                    <input
+                                        type="text"
+                                        name="tags"
+                                        value={formData.tags}
+                                        onChange={handleChange}
+                                        placeholder="e.g., math, calculator, exam (comma separated)"
+                                        className={inputClass(false)}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* --- Submit Section --- */}
+                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="termsAgreed"
+                                        checked={formData.termsAgreed}
+                                        onChange={handleChange}
+                                        className={`mt-1 w-4 h-4 border-gray-300 rounded text-gray-900 focus:ring-gray-900 ${errors.termsAgreed ? 'border-red-500' : ''}`}
+                                    />
+                                    <span className="text-sm text-gray-700">
+                                        I confirm this is a genuine request.
+                                    </span>
+                                </label>
+                                {errors.termsAgreed && <p className="mt-2 text-sm text-red-600">{errors.termsAgreed}</p>}
+                            </div>
+
+                            <div className="flex gap-4 pt-2">
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className={`flex-1 px-6 py-4 bg-gray-900 text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all shadow-md ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                >
+                                    {isSubmitting ? 'Submitting...' : 'Post Request'}
+                                </button>
+                                <Link
+                                    href="/student-dashboard"
+                                    className="px-6 py-4 bg-white border border-gray-300 text-gray-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all text-center"
+                                >
+                                    Cancel
+                                </Link>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     );
 }
-
