@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function Register() {
     const router = useRouter();
@@ -91,6 +92,7 @@ export default function Register() {
                 throw new Error(data.message || 'Registration failed');
             }
 
+            toast.success('Registration successful! Please log in.');
             router.push('/auth/login');
 
         } catch (err) {
@@ -173,6 +175,7 @@ export default function Register() {
 
             setEmailSent(true);
             setEmailMessage('Verification code sent to your email!');
+            toast.success('Verification code sent!');
             
             // Clear any previous email errors
             if (errors.email) {
