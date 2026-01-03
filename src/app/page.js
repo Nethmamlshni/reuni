@@ -1,9 +1,5 @@
 "use client";
 
-
-
-import Navbar from "../../components/layout/Navbar";
-import Footer from "../../components/layout/Footer";
 import Hero from "@/features/home/components/Hero";
 import Features from "@/features/home/components/Features";
 import FAQ from "@/features/home/components/FAQ";
@@ -13,13 +9,13 @@ import CTA from "@/features/home/components/CTA";
 export default function Home() {
     return (
         <>
-            <Navbar/>
+
             <Hero/>
             <Features/>
             <FAQ/>
             <About/>
             <CTA/>
-            <Footer/>
+    
         </>
     );
 }
