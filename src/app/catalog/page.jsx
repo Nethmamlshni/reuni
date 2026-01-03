@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-i
+
 
 export default function Catalog() {
     const [activeTab, setActiveTab] = useState('university');
     const [userItems, setUserItems] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+
 
     // Hardcoded fallback data
     const universityItems = [
@@ -181,30 +183,37 @@ export default function Catalog() {
 
     // Fetch user items from API
     useEffect(() => {
-        const fetchUserItems = async () => {
-            try {
-                // Get userId from your auth system (session, cookie, context, etc.)
-                // For example: const userId = session?.user?.id;
-                const userId = 'YOUR_USER_ID_HERE'; // Replace with actual user ID
-                
-                const response = await fetch(`/api/offer&req?userId=${userId}`);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user items');
-                }
-                
-                const data = await response.json();
-                setUserItems(data);
-                setLoading(false);
-            } catch (err) {
-                console.error('Error fetching items:', err);
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+  const fetchUserItems = async () => {
+    try {
+      const user =
+        typeof window !== 'undefined'
+          ? JSON.parse(localStorage.getItem('user'))
+          : null;
 
-        fetchUserItems();
-    }, []);
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`/api/offer&req?userId=${user.id}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user items');
+      }
+
+      const data = await response.json();
+      setUserItems(data);
+    } catch (err) {
+      console.error('Error fetching items:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUserItems();
+}, []);
+
 
     const items = activeTab === 'university' ? universityItems : studentItems;
 
