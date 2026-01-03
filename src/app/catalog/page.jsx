@@ -1,11 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+i
 
 export default function Catalog() {
     const [activeTab, setActiveTab] = useState('university');
+    const [userItems, setUserItems] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    // Hardcoded fallback data
     const universityItems = [
         {
             id: 13,
@@ -174,17 +179,49 @@ export default function Catalog() {
         },
     ];
 
+    // Fetch user items from API
+    useEffect(() => {
+        const fetchUserItems = async () => {
+            try {
+                // Get userId from your auth system (session, cookie, context, etc.)
+                // For example: const userId = session?.user?.id;
+                const userId = 'YOUR_USER_ID_HERE'; // Replace with actual user ID
+                
+                const response = await fetch(`/api/offer&req?userId=${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user items');
+                }
+                
+                const data = await response.json();
+                setUserItems(data);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching items:', err);
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchUserItems();
+    }, []);
+
     const items = activeTab === 'university' ? universityItems : studentItems;
 
     return (
         <div className="min-h-screen bg-white">
-           
-
             {/* Header */}
             <section className="py-12 px-6 bg-gray-50 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-4xl font-bold text-gray-900 mb-3">Browse Items</h1>
                     <p className="text-gray-600">Find and borrow items from the university and fellow students</p>
+                    
+                    {/* Display user's items count if loaded */}
+                    {userItems && (
+                        <div className="mt-4 text-sm text-gray-500">
+                            Your items: {userItems.itemOfferIds.length} offers, {userItems.itemRequestIds.length} requests
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -194,19 +231,21 @@ export default function Catalog() {
                     <div className="flex gap-8">
                         <button
                             onClick={() => setActiveTab('university')}
-                            className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${activeTab === 'university'
+                            className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
+                                activeTab === 'university'
                                     ? 'border-gray-900 text-gray-900'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
-                                }`}
+                            }`}
                         >
                             University Items
                         </button>
                         <button
                             onClick={() => setActiveTab('students')}
-                            className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${activeTab === 'students'
+                            className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
+                                activeTab === 'students'
                                     ? 'border-gray-900 text-gray-900'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
-                                }`}
+                            }`}
                         >
                             Student Items
                         </button>
@@ -217,6 +256,14 @@ export default function Catalog() {
             {/* Items Grid */}
             <section className="py-12 px-6">
                 <div className="max-w-7xl mx-auto">
+                    {loading && (
+                        <div className="text-center text-gray-500">Loading...</div>
+                    )}
+                    
+                    {error && (
+                        <div className="text-center text-red-500">Error: {error}</div>
+                    )}
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {items.map((item) => (
                             <div
@@ -228,10 +275,11 @@ export default function Catalog() {
                                         {item.image}
                                     </div>
                                     <span
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold ${item.availability === 'Available'
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                            item.availability === 'Available'
                                                 ? 'bg-green-100 text-green-700'
                                                 : 'bg-gray-100 text-gray-600'
-                                            }`}
+                                        }`}
                                     >
                                         {item.availability}
                                     </span>
@@ -249,10 +297,11 @@ export default function Catalog() {
                                     <span className="text-xs font-medium text-gray-500">{item.category}</span>
                                     <button
                                         disabled={item.availability === 'Borrowed'}
-                                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${item.availability === 'Available'
+                                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                                            item.availability === 'Available'
                                                 ? 'bg-gray-900 text-white hover:bg-gray-800'
                                                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                            }`}
+                                        }`}
                                     >
                                         {item.availability === 'Available' ? 'view' : 'Unavailable'}
                                     </button>
@@ -262,8 +311,6 @@ export default function Catalog() {
                     </div>
                 </div>
             </section>
-
-          
         </div>
     );
 }
