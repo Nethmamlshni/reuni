@@ -70,23 +70,23 @@ export default function UniversityListItem() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-green-50 flex flex-col">
 
             {/* Main Content */}
             <main className="flex-1 py-12 px-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="mb-8">
-                        <Link href="/dashboard" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+                        <Link href="/dashboard" className="inline-flex items-center text-sm text-green-600 hover:text-green-800 mb-4">
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                             Back to Dashboard
                         </Link>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Add University Item</h1>
-                        <p className="text-gray-600">Add a new item to the university's shared equipment catalog</p>
+                        <h1 className="text-3xl font-bold text-green-900 mb-2">Add University Item</h1>
+                        <p className="text-green-700">Add a new item to the university's shared equipment catalog</p>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                    <div className="bg-white rounded-2xl border border-green-200 p-8 shadow-sm">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Item Details */}
                             <div>
@@ -96,7 +96,7 @@ export default function UniversityListItem() {
 
                                 <div className="space-y-4">
                                     <div>
-                                        <label htmlFor="itemName" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="itemName" className="block text-sm font-medium text-green-900 mb-2">
                                             Item Name *
                                         </label>
                                         <input
@@ -116,7 +116,7 @@ export default function UniversityListItem() {
                                     </div>
 
                                     <div>
-                                        <label htmlFor="category" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="category" className="block text-sm font-medium text-green-900 mb-2">
                                             Category *
                                         </label>
                                         <select
@@ -143,7 +143,7 @@ export default function UniversityListItem() {
                                     </div>
 
                                     <div>
-                                        <label htmlFor="description" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="description" className="block text-sm font-medium text-green-900 mb-2">
                                             Description *
                                         </label>
                                         <textarea
@@ -165,7 +165,7 @@ export default function UniversityListItem() {
                                 
 
                                     <div>
-                                        <label htmlFor="condition" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="condition" className="block text-sm font-medium text-green-900 mb-2">
                                             Condition *
                                         </label>
                                         <select
@@ -184,7 +184,7 @@ export default function UniversityListItem() {
                                         </select>
                                     </div>
                                        <div>
-                                        <label htmlFor="rentalRate" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="rentalRate" className="block text-sm font-medium text-green-900 mb-2">
                                             Rental Rate per day ($) *
                                         </label>
                                         <div className="relative">
@@ -207,7 +207,7 @@ export default function UniversityListItem() {
                                         </div>
                                     </div>          
                                     <div>
-                                        <label htmlFor="images" className="block text-sm font-medium text-gray-900 mb-2">
+                                        <label htmlFor="images" className="block text-sm font-medium text-green-900 mb-2">
                                             Item Photos
                                         </label>
                                         <input

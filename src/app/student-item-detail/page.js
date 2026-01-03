@@ -116,15 +116,15 @@ export default function CreateItemRequest() {
         }
     };
 
-    const inputClass = (error) => `w-full px-4 py-3 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-gray-300'}`;
+    const inputClass = (error) => `w-full px-4 py-3 bg-white border rounded-lg text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-green-300'}`;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-green-50 flex flex-col">
             {/* Navbar Placeholder */}
-            <nav className="bg-white border-b border-gray-200 px-6 py-4 mb-8">
+            <nav className="bg-white border-b border-green-200 px-6 py-4 mb-8">
                 <div className="max-w-3xl mx-auto flex items-center justify-between">
-                    <span className="text-xl font-bold text-gray-900">UniShare</span>
-                    <Link href="/student-dashboard" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+                    <span className="text-xl font-bold text-green-700">UniShare</span>
+                    <Link href="/student-dashboard" className="text-sm font-medium text-green-600 hover:text-green-800">
                         Cancel & Exit
                     </Link>
                 </div>
@@ -133,22 +133,22 @@ export default function CreateItemRequest() {
             <main className="flex-1 px-6 pb-12">
                 <div className="max-w-3xl mx-auto">
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Request an Item</h1>
-                        <p className="text-gray-600">Tell the community what you need, and we'll help you find it.</p>
+                        <h1 className="text-3xl font-bold text-green-900 mb-2">Request an Item</h1>
+                        <p className="text-green-700">Tell the community what you need, and we'll help you find it.</p>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                    <div className="bg-white rounded-2xl border border-green-200 p-8 shadow-sm">
                         <form onSubmit={handleSubmit} className="space-y-8">
                             
                             {/* --- Item Details --- */}
                             <div>
-                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                                <h2 className="text-lg font-bold text-green-900 mb-4 pb-2 border-b border-green-200">
                                     Item Details
                                 </h2>
                                 <div className="space-y-4">
                                     {/* Title */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Request Title *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Request Title *</label>
                                         <input
                                             type="text"
                                             name="title"
@@ -162,7 +162,7 @@ export default function CreateItemRequest() {
 
                                     {/* Category */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Category *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Category *</label>
                                         <select
                                             name="category"
                                             value={formData.category}
@@ -182,7 +182,7 @@ export default function CreateItemRequest() {
 
                                     {/* Description */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Description *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Description *</label>
                                         <textarea
                                             name="description"
                                             value={formData.description}
@@ -196,7 +196,7 @@ export default function CreateItemRequest() {
 
                                     {/* Purpose */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Purpose *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Purpose *</label>
                                         <textarea
                                             name="purpose"
                                             value={formData.purpose}
@@ -212,14 +212,14 @@ export default function CreateItemRequest() {
 
                             {/* --- Logistics --- */}
                             <div>
-                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                                <h2 className="text-lg font-bold text-green-900 mb-4 pb-2 border-b border-green-200">
                                     Logistics & Timing
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     
                                     {/* Needed By Date */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Needed By Date *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Needed By Date *</label>
                                         <input
                                             type="date"
                                             name="neededByDate"
@@ -236,13 +236,13 @@ export default function CreateItemRequest() {
                                                 onChange={handleChange}
                                                 className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
                                             />
-                                            <span className="text-xs text-gray-600">I am flexible with this date</span>
+                                            <span className="text-xs text-green-700">I am flexible with this date</span>
                                         </label>
                                     </div>
 
                                     {/* Urgency Level */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Urgency Level *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Urgency Level *</label>
                                         <select
                                             name="urgencyLevel"
                                             value={formData.urgencyLevel}
@@ -259,7 +259,7 @@ export default function CreateItemRequest() {
 
                                     {/* Duration Needed */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Duration Needed *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Duration Needed *</label>
                                         <input
                                             type="text"
                                             name="durationNeeded"
@@ -273,7 +273,7 @@ export default function CreateItemRequest() {
 
                                     {/* Pickup Location */}
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-900 mb-2">Preferred Location *</label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Preferred Location *</label>
                                         <input
                                             type="text"
                                             name="pickupLocation"
@@ -289,16 +289,16 @@ export default function CreateItemRequest() {
                                                 name="flexibleLocation"
                                                 checked={formData.flexibleLocation}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                                                className="w-4 h-4 rounded border-green-300 text-green-600 focus:ring-green-600"
                                             />
-                                            <span className="text-xs text-gray-600">I am flexible with location</span>
+                                            <span className="text-xs text-green-700">I am flexible with location</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 {/* Special Instructions */}
                                 <div className="mt-6">
-                                    <label className="block text-sm font-medium text-gray-900 mb-2">Special Instructions (Optional)</label>
+                                    <label className="block text-sm font-medium text-green-900 mb-2">Special Instructions (Optional)</label>
                                     <textarea
                                         name="specialInstructions"
                                         value={formData.specialInstructions}
@@ -311,7 +311,7 @@ export default function CreateItemRequest() {
 
                                 {/* Tags */}
                                 <div className="mt-4">
-                                    <label className="block text-sm font-medium text-gray-900 mb-2">Tags (Optional)</label>
+                                    <label className="block text-sm font-medium text-green-900 mb-2">Tags (Optional)</label>
                                     <input
                                         type="text"
                                         name="tags"
@@ -324,16 +324,16 @@ export default function CreateItemRequest() {
                             </div>
 
                             {/* --- Submit Section --- */}
-                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                            <div className="bg-green-50 rounded-xl p-4 border border-green-200">
                                 <label className="flex items-start gap-3 cursor-pointer">
                                     <input
                                         type="checkbox"
                                         name="termsAgreed"
                                         checked={formData.termsAgreed}
                                         onChange={handleChange}
-                                        className={`mt-1 w-4 h-4 border-gray-300 rounded text-gray-900 focus:ring-gray-900 ${errors.termsAgreed ? 'border-red-500' : ''}`}
+                                        className={`mt-1 w-4 h-4 border-green-300 rounded text-green-600 focus:ring-green-600 ${errors.termsAgreed ? 'border-red-500' : ''}`}
                                     />
-                                    <span className="text-sm text-gray-700">
+                                    <span className="text-sm text-green-800">
                                         I confirm this is a genuine request.
                                     </span>
                                 </label>
@@ -344,13 +344,13 @@ export default function CreateItemRequest() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className={`flex-1 px-6 py-4 bg-gray-900 text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all shadow-md ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                    className={`flex-1 px-6 py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition-all shadow-md ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                                 >
                                     {isSubmitting ? 'Submitting...' : 'Post Request'}
                                 </button>
                                 <Link
-                                    href="/student-dashboard"
-                                    className="px-6 py-4 bg-white border border-gray-300 text-gray-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all text-center"
+                                    href="/student/dashboard"
+                                    className="px-6 py-4 bg-white border border-green-300 text-green-700 rounded-xl font-bold text-lg hover:bg-green-50 transition-all text-center"
                                 >
                                     Cancel
                                 </Link>

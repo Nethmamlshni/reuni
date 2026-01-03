@@ -192,6 +192,7 @@ export default function Catalog() {
             <div className="bg-white border-b border-gray-200 sticky top-[73px] z-40">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex gap-8">
+                        
                         <button
                             onClick={() => setActiveTab('university')}
                             className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${activeTab === 'university'
@@ -201,6 +202,7 @@ export default function Catalog() {
                         >
                             University Items
                         </button>
+                        
                         <button
                             onClick={() => setActiveTab('students')}
                             className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${activeTab === 'students'

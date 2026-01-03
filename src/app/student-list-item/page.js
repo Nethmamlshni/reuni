@@ -1,286 +1,347 @@
+
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function StudentListItem() {
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [formData, setFormData] = useState({
-        itemName: '',
+        title: '',
         category: '',
         description: '',
         condition: '',
-        images: null,
         availableFrom: '',
         availableUntil: '',
-        pickupLocation: '',
+        pickupLocations: '', // User types "Library, Cafe" -> we convert to Array
+        specialConditions: '',
+        tags: '', // User types "math, book" -> we convert to Array
+        requireDeposit: false,
+        photos: [], // Stores Base64 strings
         termsAgreed: false,
     });
 
     const [errors, setErrors] = useState({});
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const newErrors = {};
-
-        if (!formData.itemName) {
-            newErrors.itemName = 'Item name is required';
-        }
-
-        if (!formData.category) {
-            newErrors.category = 'Category is required';
-        }
-
-        if (!formData.description) {
-            newErrors.description = 'Description is required';
-        }
-
-        if (!formData.termsAgreed) {
-            newErrors.termsAgreed = 'You must agree to the terms';
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+    // --- Handle Image Conversion to Base64 ---
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        
+        // Limit to 5 images for performance
+        if (files.length > 5) {
+            alert("Maximum 5 images allowed");
             return;
         }
 
-        console.log('Student Item Listed:', formData);
-        alert('Item listed successfully! It will be visible in the catalog once approved.');
-        window.location.href = '/student-dashboard';
+        const promises = files.map((file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            });
+        });
+
+        Promise.all(promises)
+            .then((base64Images) => {
+                setFormData((prev) => ({ ...prev, photos: base64Images }));
+            })
+            .catch((error) => console.error("Error converting images", error));
     };
 
     const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
+        const { name, value, type, checked } = e.target;
         setFormData({
             ...formData,
-            [name]: type === 'checkbox' ? checked : type === 'file' ? files : value,
+            [name]: type === 'checkbox' ? checked : value,
         });
+        if (errors[name]) setErrors({ ...errors, [name]: '' });
+    };
 
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: '',
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrors({});
+
+        // --- Client Validation ---
+        const newErrors = {};
+        if (!formData.title) newErrors.title = 'Title is required';
+        if (!formData.category) newErrors.category = 'Category is required';
+        if (!formData.description) newErrors.description = 'Description is required';
+        if (!formData.condition) newErrors.condition = 'Condition is required';
+        if (!formData.availableFrom) newErrors.availableFrom = 'Start date is required';
+        if (!formData.availableUntil) newErrors.availableUntil = 'End date is required';
+        if (!formData.pickupLocations) newErrors.pickupLocations = 'Pickup location is required';
+        if (formData.photos.length === 0) newErrors.photos = 'At least one photo is required';
+        if (!formData.termsAgreed) newErrors.termsAgreed = 'You must agree to terms';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            window.scrollTo(0,0);
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // --- Transform Data for Backend ---
+            const locationsArray = formData.pickupLocations.split(',').map(s => s.trim()).filter(s => s);
+            const tagsArray = formData.tags ? formData.tags.split(',').map(s => s.trim()).filter(s => s) : [];
+
+            const payload = {
+                title: formData.title,
+                // MOCK USER ID: Replace with actual auth session ID
+                userId: "654321999999999999999999", 
+                category: formData.category,
+                description: formData.description,
+                condition: formData.condition,
+                availableFrom: formData.availableFrom,
+                availableUntil: formData.availableUntil,
+                pickupLocations: locationsArray,
+                requireDeposit: formData.requireDeposit,
+                specialConditions: formData.specialConditions,
+                tags: tagsArray,
+                photos: formData.photos, // Sending Base64 array
+            };
+
+            // --- Send to API ---
+            const response = await fetch('/api/itemoffer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to list item');
+            }
+
+            alert('Item listed successfully!');
+            router.push('/student/dashboard'); // Corrected path
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Submission Failed: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+    const inputClass = (error) => `w-full px-4 py-3 bg-white border rounded-lg text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-green-300'}`;
 
-            {/* Main Content */}
+    return (
+        <div className="min-h-screen bg-green-50 flex flex-col">
             <main className="flex-1 py-12 px-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="mb-8">
-                        <Link href="/student-dashboard" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+                        <Link href="/student/dashboard" className="inline-flex items-center text-sm text-green-600 hover:text-green-800 mb-4">
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                             Back to Dashboard
                         </Link>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">List a New Item</h1>
-                        <p className="text-gray-600">Share your item with other students on campus</p>
+                        <h1 className="text-3xl font-bold text-green-900 mb-2">List a New Item</h1>
+                        <p className="text-green-700">Share your item with other students on campus</p>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                    <div className="bg-white rounded-2xl border border-green-200 p-8 shadow-sm">
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* Item Details */}
+                            
+                            {/* --- Item Details --- */}
                             <div>
-                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-                                    Item Details
-                                </h2>
-
+                                <h2 className="text-lg font-bold text-green-900 mb-4 pb-2 border-b border-green-200">Item Details</h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <label htmlFor="itemName" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Item Name *
-                                        </label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Item Name *</label>
                                         <input
                                             type="text"
-                                            id="itemName"
-                                            name="itemName"
-                                            value={formData.itemName}
+                                            name="title"
+                                            value={formData.title}
                                             onChange={handleChange}
-                                            required
-                                            placeholder="e.g., Calculus Textbook, Graphing Calculator"
-                                            className={`w-full px-4 py-3 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${errors.itemName ? 'border-red-500' : 'border-gray-300'
-                                                }`}
+                                            className={inputClass(errors.title)}
+                                            placeholder="e.g., Calculus Textbook"
                                         />
-                                        {errors.itemName && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.itemName}</p>
-                                        )}
+                                        {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-green-900 mb-2">Category *</label>
+                                            <select
+                                                name="category"
+                                                value={formData.category}
+                                                onChange={handleChange}
+                                                className={inputClass(errors.category)}
+                                            >
+                                                <option value="">Select...</option>
+                                                <option value="Electronics">Electronics</option>
+                                                <option value="Books">Books</option>
+                                                <option value="Clothing">Clothing</option>
+                                                <option value="Tools">Tools</option>
+                                                <option value="Stationery">Stationery</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-green-900 mb-2">Condition *</label>
+                                            <select
+                                                name="condition"
+                                                value={formData.condition}
+                                                onChange={handleChange}
+                                                className={inputClass(errors.condition)}
+                                            >
+                                                <option value="">Select...</option>
+                                                <option value="New">New</option>
+                                                <option value="Like New">Like New</option>
+                                                <option value="Good">Good</option>
+                                                <option value="Fair">Fair</option>
+                                                <option value="Poor">Poor</option>
+                                            </select>
+                                            {errors.condition && <p className="mt-1 text-sm text-red-600">{errors.condition}</p>}
+                                        </div>
                                     </div>
 
                                     <div>
-                                        <label htmlFor="category" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Category *
-                                        </label>
-                                        <select
-                                            id="category"
-                                            name="category"
-                                            value={formData.category}
-                                            onChange={handleChange}
-                                            required
-                                            className={`w-full px-4 py-3 bg-white border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${errors.category ? 'border-red-500' : 'border-gray-300'
-                                                }`}
-                                        >
-                                            <option value="">Select a category</option>
-                                            <option value="books">Books & Textbooks</option>
-                                            <option value="electronics">Electronics</option>
-                                            <option value="clothing">Clothing & Accessories</option>
-                                            <option value="sports">Sports Equipment</option>
-                                            <option value="appliances">Appliances</option>
-                                            <option value="furniture">Furniture</option>
-                                            <option value="other">Other</option>
-                                        </select>
-                                        {errors.category && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.category}</p>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="description" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Description *
-                                        </label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Description *</label>
                                         <textarea
-                                            id="description"
                                             name="description"
                                             value={formData.description}
                                             onChange={handleChange}
-                                            required
                                             rows={4}
-                                            placeholder="Provide details about the item, its features, and condition"
-                                            className={`w-full px-4 py-3 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all resize-none ${errors.description ? 'border-red-500' : 'border-gray-300'
-                                                }`}
+                                            className={`${inputClass(errors.description)} resize-none`}
+                                            placeholder="Details about the item..."
                                         />
-                                        {errors.description && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.description}</p>
-                                        )}
+                                        {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
                                     </div>
 
+                                    {/* Image Upload */}
                                     <div>
-                                        <label htmlFor="condition" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Condition *
-                                        </label>
-                                        <select
-                                            id="condition"
-                                            name="condition"
-                                            value={formData.condition}
-                                            onChange={handleChange}
-                                            required
-                                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
-                                        >
-                                            <option value="">Select condition</option>
-                                            <option value="new">New</option>
-                                            <option value="excellent">Excellent</option>
-                                            <option value="good">Good</option>
-                                            <option value="fair">Fair</option>
-                                            <option value="poor">Poor</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="images" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Item Photos (Optional)
-                                        </label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Item Photos *</label>
                                         <input
                                             type="file"
-                                            id="images"
-                                            name="images"
-                                            onChange={handleChange}
-                                            multiple
                                             accept="image/*"
-                                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-900 file:font-medium hover:file:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                            multiple
+                                            onChange={handleImageChange}
+                                            className="w-full px-4 py-3 bg-white border border-green-300 rounded-lg text-green-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-100 file:text-green-900 file:font-medium hover:file:bg-green-200"
                                         />
-                                        <p className="mt-1 text-xs text-gray-500">Upload up to 5 photos of your item</p>
+                                        <p className="mt-1 text-xs text-gray-500">
+                                            {formData.photos.length > 0 ? `${formData.photos.length} photos selected` : "Upload up to 5 photos"}
+                                        </p>
+                                        {errors.photos && <p className="mt-1 text-sm text-red-600">{errors.photos}</p>}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Availability */}
+                            {/* --- Logistics --- */}
                             <div>
-                                <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-                                    Availability
-                                </h2>
-
+                                <h2 className="text-lg font-bold text-green-900 mb-4 pb-2 border-b border-green-200">Availability & Logistics</h2>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label htmlFor="availableFrom" className="block text-sm font-medium text-gray-900 mb-2">
-                                                Available From
-                                            </label>
+                                            <label className="block text-sm font-medium text-green-900 mb-2">Available From *</label>
                                             <input
                                                 type="date"
-                                                id="availableFrom"
                                                 name="availableFrom"
                                                 value={formData.availableFrom}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                                className={inputClass(errors.availableFrom)}
                                             />
+                                            {errors.availableFrom && <p className="mt-1 text-sm text-red-600">{errors.availableFrom}</p>}
                                         </div>
-
                                         <div>
-                                            <label htmlFor="availableUntil" className="block text-sm font-medium text-gray-900 mb-2">
-                                                Available Until
-                                            </label>
+                                            <label className="block text-sm font-medium text-green-900 mb-2">Available Until *</label>
                                             <input
                                                 type="date"
-                                                id="availableUntil"
                                                 name="availableUntil"
                                                 value={formData.availableUntil}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                                className={inputClass(errors.availableUntil)}
                                             />
+                                            {errors.availableUntil && <p className="mt-1 text-sm text-red-600">{errors.availableUntil}</p>}
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label htmlFor="pickupLocation" className="block text-sm font-medium text-gray-900 mb-2">
-                                            Pickup/Exchange Location
-                                        </label>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Pickup Locations *</label>
                                         <input
                                             type="text"
-                                            id="pickupLocation"
-                                            name="pickupLocation"
-                                            value={formData.pickupLocation}
+                                            name="pickupLocations"
+                                            value={formData.pickupLocations}
                                             onChange={handleChange}
-                                            placeholder="e.g., Library Cafe, Dorm Building C"
-                                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                            className={inputClass(errors.pickupLocations)}
+                                            placeholder="e.g., Library, Student Center (comma separated)"
+                                        />
+                                        {errors.pickupLocations && <p className="mt-1 text-sm text-red-600">{errors.pickupLocations}</p>}
+                                    </div>
+
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <input 
+                                            type="checkbox" 
+                                            name="requireDeposit" 
+                                            checked={formData.requireDeposit} 
+                                            onChange={handleChange} 
+                                            className="w-4 h-4 rounded border-green-300 text-green-600 focus:ring-green-600"
+                                        />
+                                        <span className="text-sm text-gray-700">Require a deposit?</span>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Special Conditions (Optional)</label>
+                                        <textarea
+                                            name="specialConditions"
+                                            value={formData.specialConditions}
+                                            onChange={handleChange}
+                                            rows={2}
+                                            className={`${inputClass(false)} resize-none`}
+                                            placeholder="e.g., Must return by Friday 5PM"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-green-900 mb-2">Tags (Optional)</label>
+                                        <input
+                                            type="text"
+                                            name="tags"
+                                            value={formData.tags}
+                                            onChange={handleChange}
+                                            className={inputClass(false)}
+                                            placeholder="e.g., math, calculator (comma separated)"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Terms */}
-                            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            {/* --- Submit --- */}
+                            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <label className="flex items-start gap-3 cursor-pointer">
                                     <input
                                         type="checkbox"
                                         name="termsAgreed"
                                         checked={formData.termsAgreed}
                                         onChange={handleChange}
-                                        className={`mt-1 w-4 h-4 border-gray-300 rounded text-gray-900 focus:ring-gray-900 ${errors.termsAgreed ? 'border-red-500' : ''
-                                            }`}
+                                        className={`mt-1 w-4 h-4 border-green-300 rounded text-green-600 focus:ring-green-600 ${errors.termsAgreed ? 'border-red-500' : ''}`}
                                     />
-                                    <span className="text-sm text-gray-700">
-                                        I confirm that I own this item and have the right to share it. I will maintain the item in good condition and respond to borrowing requests promptly. I understand that all sharing is free of charge.
-                                    </span>
+                                    <span className="text-sm text-green-800">I confirm that I own this item and have the right to share it.</span>
                                 </label>
-                                {errors.termsAgreed && (
-                                    <p className="mt-2 text-sm text-red-600">{errors.termsAgreed}</p>
-                                )}
+                                {errors.termsAgreed && <p className="mt-2 text-sm text-red-600">{errors.termsAgreed}</p>}
                             </div>
 
-                            {/* Submit Buttons */}
-                            <div className="flex gap-4 pt-4">
+                            <div className="flex gap-4 pt-2">
                                 <button
                                     type="submit"
-                                    className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all shadow-sm"
+                                    disabled={isSubmitting}
+                                    className={`flex-1 px-6 py-4 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition-all ${isSubmitting ? 'opacity-70' : ''}`}
                                 >
-                                    List Item
+                                    {isSubmitting ? 'Uploading & Listing...' : 'List Item'}
                                 </button>
                                 <Link
-                                    href="/student-dashboard"
-                                    className="px-6 py-3 bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-all text-center"
+                                    href="/student/dashboard"
+                                    className="px-6 py-4 bg-white border border-green-300 text-green-700 rounded-lg font-bold hover:bg-green-50 transition-all text-center"
                                 >
                                     Cancel
                                 </Link>
@@ -289,9 +350,6 @@ export default function StudentListItem() {
                     </div>
                 </div>
             </main>
-
-        
         </div>
     );
 }
-

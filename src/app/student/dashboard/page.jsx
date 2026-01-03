@@ -112,10 +112,12 @@ export default function StudentDashboard() {
                   <Link href="/catalog">
                     <Button className="w-full">Browse Available Items</Button>
                   </Link>
+                  <Link href="/student-list-item">
                   <Button variant="outline" className="w-full flex justify-between items-center">
                     List a New Item
                     <span className="text-xl font-bold">+</span>
                   </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>

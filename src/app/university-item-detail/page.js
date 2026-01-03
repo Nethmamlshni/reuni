@@ -97,15 +97,15 @@ export default function OrganizationItemDetail() {
     };
 
     // Shared input class string for consistency
-    const inputClass = (error) => `w-full px-4 py-2.5 bg-white border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-gray-300'}`;
+    const inputClass = (error) => `w-full px-4 py-2.5 bg-white border rounded-lg text-green-900 placeholder-green-400 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all ${error ? 'border-red-500' : 'border-green-300'}`;
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-green-50">
            
 
             {/* Main Content */}
             <div className="max-w-6xl mx-auto px-6 py-8">
-                <Link href="/catalog" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-6">
+                <Link href="/catalog" className="inline-flex items-center text-sm text-green-600 hover:text-green-800 mb-6">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
@@ -117,15 +117,15 @@ export default function OrganizationItemDetail() {
                     {/* LEFT COLUMN: Item Details */}
                     <div className="space-y-6">
                         {/* Item Image & Basic Info */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-8">
-                            <div className="w-full aspect-square bg-gray-100 rounded-xl flex items-center justify-center mb-6">
+                        <div className="bg-white rounded-2xl border border-green-200 p-8">
+                            <div className="w-full aspect-square bg-green-100 rounded-xl flex items-center justify-center mb-6">
                                 <span className="text-9xl">{item.image}</span>
                             </div>
 
                             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                                 <div className="flex gap-2">
                                     <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                                        item.availability === 'Available' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                        item.availability === 'Available' ? 'bg-green-100 text-green-700' : 'bg-green-100 text-green-600'
                                     }`}>
                                         {item.availability}
                                     </span>
@@ -135,31 +135,31 @@ export default function OrganizationItemDetail() {
                                 </div>
                                 <div className="text-right">
                                     <span className="block text-xs text-gray-500 uppercase tracking-wider font-bold">Rate</span>
-                                    <span className="text-xl font-bold text-gray-900">{item.currency}{item.price}<span className="text-sm font-normal text-gray-500">/day</span></span>
+                                    <span className="text-xl font-bold text-green-900">{item.currency}{item.price}<span className="text-sm font-normal text-green-600">/day</span></span>
                                 </div>
                             </div>
 
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">{item.name}</h1>
-                            <p className="text-gray-600 mb-4">{item.category}</p>
+                            <h1 className="text-3xl font-bold text-green-900 mb-2">{item.name}</h1>
+                            <p className="text-green-700 mb-4">{item.category}</p>
                             <p className="text-gray-700 leading-relaxed">{item.description}</p>
                         </div>
 
                         {/* Additional Info */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                            <h2 className="text-lg font-bold text-gray-900 mb-4">Additional Information</h2>
+                        <div className="bg-white rounded-2xl border border-green-200 p-6">
+                            <h2 className="text-lg font-bold text-green-900 mb-4">Additional Information</h2>
                             <div className="space-y-3">
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Special Instructions</p>
-                                    <p className="font-medium text-gray-900">{item.specialInstructions}</p>
+                                    <p className="text-sm text-green-600 mb-1">Special Instructions</p>
+                                    <p className="font-medium text-green-900">{item.specialInstructions}</p>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <p className="text-sm text-gray-600 mb-1">Condition</p>
-                                        <p className="font-medium text-gray-900">{item.condition}</p>
+                                        <p className="text-sm text-green-600 mb-1">Condition</p>
+                                        <p className="font-medium text-green-900">{item.condition}</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 mb-1">Max Duration</p>
-                                        <p className="font-medium text-gray-900">{item.maxDuration} Days</p>
+                                        <p className="text-sm text-green-600 mb-1">Max Duration</p>
+                                        <p className="font-medium text-green-900">{item.maxDuration} Days</p>
                                     </div>
                                 </div>
                             </div>
@@ -168,9 +168,9 @@ export default function OrganizationItemDetail() {
 
                     {/* RIGHT COLUMN: Request Form */}
                     <div className="lg:sticky lg:top-8 h-fit">
-                        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Organization Request</h2>
-                            <p className="text-gray-600 mb-6">Fill out the details below to request this item for your organization.</p>
+                        <div className="bg-white rounded-2xl border border-green-200 p-6">
+                            <h2 className="text-2xl font-bold text-green-900 mb-2">Organization Request</h2>
+                            <p className="text-green-700 mb-6">Fill out the details below to request this item for your organization.</p>
 
                             {!showForm ? (
                                 <button
@@ -178,8 +178,8 @@ export default function OrganizationItemDetail() {
                                     disabled={item.availability !== 'Available'}
                                     className={`w-full px-6 py-3 rounded-lg font-medium transition-all ${
                                         item.availability === 'Available'
-                                        ? 'bg-gray-900 text-white hover:bg-gray-800'
-                                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                        ? 'bg-green-600 text-white hover:bg-green-700'
+                                        : 'bg-green-100 text-green-400 cursor-not-allowed'
                                     }`}
                                 >
                                     {item.availability === 'Available' ? 'Request Item' : 'Currently Unavailable'}
