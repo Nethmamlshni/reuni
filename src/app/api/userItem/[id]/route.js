@@ -1,8 +1,8 @@
 // app/api/userItems/[id]/route.js
 const { NextResponse } = require("next/server");
-const { connectDB } = require("@/lib/mongodb");
-const { ItemRequest } = require("@/models/itemreqModels");
-const { Item } = require("@/models/itemofferModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { ItemRequest } = require("../../models/itemreqModels");
+const { Item } = require("../../models/itemofferModels");
 
 async function GET(request, { params }) {
   try {

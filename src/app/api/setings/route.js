@@ -1,8 +1,8 @@
 // app/api/setings/route.js
 const { NextResponse } = require("next/server");
-const { connectDB } = require("@/lib/mongodb");
-const { User } = require("@/models/userModels");
-const { verifyToken } = require("@/lib/jwt");
+const { connectDB } = require("../../../lib/mongodb");
+const { User } = require("../../../models/userModels");
+const { verifyToken } = require("../../../lib/jwt");
 
 async function PUT(req) {
   await connectDB();

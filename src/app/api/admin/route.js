@@ -1,8 +1,8 @@
 // /app/api/users-items/route.js
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
-import { Item } from '@/models/itemofferModels';
-import { ItemRequest } from '@/models/itemreqModels';
+import { connectDB } from '../../../lib/mongodb';
+import { Item } from '../../models/itemofferModels';
+import { ItemRequest } from '../../models/itemreqModels';
 
 export async function GET() {
   try {

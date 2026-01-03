@@ -1,6 +1,6 @@
 // app/api/upload/route.js
 const { NextResponse } = require("next/server");
-const cloudinary = require("@/lib/cloudinary");
+const cloudinary = require("../../../lib/cloudinary");
 
 async function POST(req) {
   try {

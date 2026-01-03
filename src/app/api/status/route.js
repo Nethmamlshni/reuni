@@ -1,9 +1,9 @@
 // app/api/stats/route.js
 const { NextResponse } = require("next/server");
-const { connectDB } = require("@/lib/mongodb");
-const { User } = require("@/models/userModels");
-const { Item } = require("@/models/itemofferModels");
-const { ItemRequest } = require("@/models/itemreqModels");
+const { connectDB } = require("../../../lib/mongodb");
+const { User } = require("../../../models/userModels");
+const { Item } = require("../../../models/itemofferModels");
+const { ItemRequest } = require("../../../models/itemreqModels");
 
 async function GET() {
   try {
