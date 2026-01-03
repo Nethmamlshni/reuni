@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { BrowserOffer } from "@/models/browseofferModels";
+import { connectDB } from "../../../../lib/mongodb";
+import { BrowserOffer } from "../../../models/browseofferModel";
 
 // ----------------------------------------------
 // ---------- GET: Fetch by offerId, userId, or requestId --------------
@@ -8,38 +8,29 @@ import { BrowserOffer } from "@/models/browseofferModels";
 export async function GET(_, context) {
   try {
     await connectDB();
-    const id = context.params.id;
+    const id = context.params.id; // no await here
+    console.log("Fetching browse offer with id:", id);
 
     // Try direct offer id
     const offer = await BrowserOffer.findById(id).populate("userId");
-    if (offer) {
-      return NextResponse.json(offer, { status: 200 });
-    }
+    if (offer) return NextResponse.json(offer, { status: 200 });
 
-    // Try offers by userId (offerer)
-    const userOffers = await BrowserOffer.find({ userId: id }).sort({
-      createdAt: -1,
-    });
-    if (userOffers.length > 0) {
-      return NextResponse.json(userOffers, { status: 200 });
-    }
+    // Try offers by userId
+    const userOffers = await BrowserOffer.find({ userId: id }).sort({ createdAt: -1 });
+    if (userOffers.length > 0) return NextResponse.json(userOffers, { status: 200 });
 
-    // Try offers by requestId (for requester to see all received)
+    // Try offers by requestId
     const requestOffers = await BrowserOffer.find({ requestId: id })
       .sort({ createdAt: -1 })
       .populate("userId");
-    if (requestOffers.length > 0) {
-      return NextResponse.json(requestOffers, { status: 200 });
-    }
+    if (requestOffers.length > 0) return NextResponse.json(requestOffers, { status: 200 });
 
-    return NextResponse.json(
-      { message: "No matching browse offer found" },
-      { status: 404 }
-    );
+    return NextResponse.json({ message: "No matching browse offer found" }, { status: 404 });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+
 
 // ----------------------------------------------
 // ---------- PUT: Update an offer --------------
